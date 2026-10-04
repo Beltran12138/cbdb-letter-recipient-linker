@@ -1,0 +1,10 @@
+# CBDB data is CC BY-NC-SA and is not redistributed
+*.sqlite3
+*.db
+*.7z
+*.zip
+*.json
+csa/newtask.csv
+# generated
+*.pkl
+__pycache__/

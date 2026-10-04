@@ -1,0 +1,171 @@
+<title>Letter Recipient Linker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&family=Noto+Serif+TC:wght@500;700&display=swap">
+<style>
+/* Layout: single reading column of a methods note; wide tables scroll in their own frames; letter titles set in a CJK serif as specimens */
+:root {
+  --paper: #f6f7f8;
+  --sheet: #ffffff;
+  --ink: #1b2328;
+  --muted: #5a6670;
+  --rule: #d5dbe0;
+  --accent: #2c5d6e;
+  --accent-soft: #e3edf0;
+  --warn: #8a4b12;
+  --warn-soft: #f6ead9;
+  --good: #2f6b45;
+  --f-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-cjk: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --s-1: 0.8125rem; --s0: 1rem; --s1: 1.1875rem; --s2: 1.5rem; --s3: 2rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12171a; --sheet: #182024; --ink: #e3e8eb; --muted: #9aa7b0; --rule: #2c373d;
+    --accent: #7fb3c4; --accent-soft: #1d3138; --warn: #e2a768; --warn-soft: #33261a; --good: #86c39b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12171a; --sheet: #182024; --ink: #e3e8eb; --muted: #9aa7b0; --rule: #2c373d;
+  --accent: #7fb3c4; --accent-soft: #1d3138; --warn: #e2a768; --warn-soft: #33261a; --good: #86c39b;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 400 var(--s0)/1.6 var(--f-body); padding-inline: 20px; padding-block: 40px 64px; }
+main { max-width: 46rem; margin: 0 auto; display: grid; gap: 2.5rem; }
+header { display: grid; gap: 0.75rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--rule); }
+.eyebrow { font: 500 var(--s-1)/1.3 var(--f-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+h1 { font: 600 var(--s3)/1.15 var(--f-body); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h2 { font: 600 var(--s2)/1.25 var(--f-body); margin: 0; text-wrap: balance; }
+h3 { font: 600 var(--s1)/1.3 var(--f-body); margin: 0; }
+section { display: grid; gap: 1rem; }
+p, li { max-width: 65ch; margin: 0; }
+ul, ol { margin: 0; padding-left: 1.25rem; display: grid; gap: 0.4rem; }
+.meta { color: var(--muted); font-size: var(--s-1); display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; }
+.summary { background: var(--accent-soft); border-radius: 6px; padding: 1.25rem 1.4rem; display: grid; gap: 0.6rem; }
+.summary strong { color: var(--accent); }
+.frame { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--sheet); }
+table { border-collapse: collapse; width: 100%; font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--rule); vertical-align: top; white-space: nowrap; }
+td.wrap, th.wrap { white-space: normal; min-width: 14rem; }
+th { font: 500 var(--s-1)/1.3 var(--f-mono); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); background: var(--paper); }
+tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; }
+tr.primary td { background: var(--accent-soft); font-weight: 500; }
+.cjk { font-family: var(--f-cjk); font-weight: 500; }
+.tag { display: inline-block; font: 500 0.75rem/1 var(--f-mono); padding: 0.25rem 0.45rem; border-radius: 4px; letter-spacing: 0.03em; }
+.tag.pre { color: var(--good); border: 1px solid currentColor; }
+.tag.post { color: var(--warn); border: 1px solid currentColor; }
+.note { color: var(--muted); font-size: var(--s-1); }
+.caveat { border-left: 3px solid var(--warn); background: var(--warn-soft); padding: 0.9rem 1.1rem; border-radius: 0 6px 6px 0; display: grid; gap: 0.5rem; }
+code { font-family: var(--f-mono); font-size: 0.875em; background: var(--sheet); border: 1px solid var(--rule); padding: 0.05em 0.35em; border-radius: 3px; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1.2rem; margin: 0; }
+dt { font: 500 var(--s-1)/1.6 var(--f-mono); color: var(--muted); }
+dd { margin: 0; }
+@media (max-width: 520px) { dl { grid-template-columns: 1fr; } dt { margin-top: 0.4rem; } h1 { font-size: 1.6rem; } }
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">Methods note · draft for the CBDB team · 2026-10-04</div>
+    <h1>Linking letter titles to recipients in CBDB</h1>
+    <p>An automatic first pass for 致書 / 答書 records: given a letter's writer and title, propose the recipient's CBDB person ID with a calibrated confidence, and abstain when unsure.</p>
+    <div class="meta"><span>Data: CBDB SQLite 2026-10-03 and three earlier releases</span><span>Code: available on request</span></div>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <h2>Summary</h2>
+    <p>Trained only on what CBDB contained on 2022-07-27, the linker was asked to identify the 9,738 titled letters that entered CBDB between 2022-07 and 2023-03 (the CSA Ming letters batch). It named the correct recipient first for <strong>87.1%</strong> of them. When it answered only above its pre-set confidence threshold, it covered <strong>51.1%</strong> of the batch at <strong>97.7%</strong> precision.</p>
+    <p>The gain is concentrated in letters that human contributors also found easy. On the 704 letters that were still unidentified in the public CSA task file and were identified later, top-1 accuracy falls to <strong>24.1%</strong>. The CSA page lists 54,391 Ming letters, of which only a minority have identified addressees. How many of the rest are easy cases is unknown, so a small reviewed pilot would be the next honest step.</p>
+  </section>
+
+  <section>
+    <h2>The task</h2>
+    <p>CBDB holds 14,958 letter relations (codes 429 致書Y, 431 答Y書, 433 致Y啓, 435 答Y啓), each with a title in <code>c_text_title</code> and an identified recipient. Writers are mostly Ming (9,728) and Song (4,535). The recipient is usually named by courtesy name, style name or office, rarely by personal name:</p>
+    <div class="frame">
+      <table>
+        <thead><tr><th>Writer</th><th>Title</th><th>Recipient in CBDB</th><th class="wrap">How the title names them</th></tr></thead>
+        <tbody>
+          <tr><td class="cjk">袁中道</td><td class="cjk">《答錢受之》</td><td class="cjk">錢謙益</td><td class="wrap">surname + courtesy name 受之</td></tr>
+          <tr><td class="cjk">張祥鳶</td><td class="cjk">《與胡蓮渠書》</td><td class="cjk">胡涍</td><td class="wrap">surname + style name 蓮渠</td></tr>
+          <tr><td class="cjk">陳文蔚</td><td class="cjk">《通晦菴先生書問大學誠意章書》</td><td class="cjk">朱熹</td><td class="wrap">style name with variant character 菴/庵</td></tr>
+          <tr><td class="cjk">薛季宣</td><td class="cjk">《與張左司栻書》</td><td class="cjk">張栻</td><td class="wrap">surname, office 左司, then given name</td></tr>
+          <tr><td class="cjk">蘇舜欽</td><td class="cjk">《答范資政書》</td><td class="cjk">范仲淹</td><td class="wrap">surname + office only</td></tr>
+          <tr><td class="cjk">曾鞏</td><td class="cjk">《答范資政書》</td><td class="cjk">范百祿</td><td class="wrap">same title, different person: only the writer and period decide</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Method</h2>
+    <ol>
+      <li><strong>Candidates.</strong> Substrings of the title (2–4 characters) are looked up against every person's name and alternate names (<code>ALTNAME_DATA</code>), with common suffixes such as 山人 and 先生 stripped and a short table of variant characters (荅/答, 廵/巡, 菴/庵, 内/內 and others). Four rules add candidates the dictionary misses: surname followed within seven characters by a given name; surname plus an office term checked against <code>POSTED_TO_OFFICE_DATA</code>; the writer's kin named in the title; and the stripped-suffix aliases. Candidates more than 150 years from the writer are dropped.</li>
+      <li><strong>Ranking.</strong> A gradient-boosted classifier scores each candidate on 27 features: match length, whether the preceding character is the candidate's surname, alias type (字, 號, 謚號…), how many people share the matched string, distance in index year, shared dynasty and address, non-letter associations and kinship with the writer, and offices whose names appear in the title.</li>
+      <li><strong>Confidence and abstention.</strong> Confidence is the model's probability for its top candidate. Below a threshold chosen on the training data, the linker returns no answer.</li>
+      <li><strong>Leakage guard.</strong> No feature uses letter relations (codes 429–436), since these are the labels.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Evaluations</h2>
+    <p>Every split was written down before it was run. Rows marked post hoc are breakdowns made after seeing the result and should be read as descriptive.</p>
+    <div class="frame">
+      <table>
+        <thead>
+          <tr><th>Run</th><th class="wrap">Test set</th><th class="num">Letters</th><th class="num">Candidate recall</th><th class="num">Top-1</th><th class="num">Answered</th><th class="num">Precision when answered</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr class="primary"><td>run4</td><td class="wrap">Train on 2022-07-27 release; test on letters added 2022-07 → 2023-03</td><td class="num">9,738</td><td class="num">91.1%</td><td class="num">87.1%</td><td class="num">51.1%</td><td class="num">97.7%</td><td><span class="tag pre">pre-registered</span></td></tr>
+          <tr><td>run4</td><td class="wrap">Same, fixed threshold 0.9</td><td class="num">9,738</td><td class="num">—</td><td class="num">—</td><td class="num">62.8%</td><td class="num">97.6%</td><td><span class="tag pre">pre-registered</span></td></tr>
+          <tr><td>run4</td><td class="wrap">Subset already filled in CSA task file</td><td class="num">2,459</td><td class="num">—</td><td class="num">88.9%</td><td class="num">50.8%</td><td class="num">98.0%</td><td><span class="tag post">post hoc</span></td></tr>
+          <tr><td>run4</td><td class="wrap">Subset not in CSA task file</td><td class="num">6,616</td><td class="num">—</td><td class="num">92.6%</td><td class="num">55.6%</td><td class="num">97.9%</td><td><span class="tag post">post hoc</span></td></tr>
+          <tr><td>run4</td><td class="wrap">Subset still empty in CSA task file</td><td class="num">704</td><td class="num">—</td><td class="num">24.1%</td><td class="num">7.7%</td><td class="num">77.8%</td><td><span class="tag post">post hoc</span></td></tr>
+          <tr><td>run2</td><td class="wrap">Writer-held-out split of the 2026 release</td><td class="num">2,651</td><td class="num">80.3%</td><td class="num">76.9%</td><td class="num">83.0%</td><td class="num">90.4%</td><td><span class="tag pre">pre-registered</span></td></tr>
+          <tr><td>run2</td><td class="wrap">Letters empty in CSA task file, identified later</td><td class="num">721</td><td class="num">50.6%</td><td class="num">43.6%</td><td class="num">65.0%</td><td class="num">62.7%</td><td><span class="tag pre">pre-registered</span></td></tr>
+          <tr><td>run3</td><td class="wrap">Train on 2023-03-24 release; test on letters added since</td><td class="num">536</td><td class="num">20.0%</td><td class="num">19.2%</td><td class="num">32.5%</td><td class="num">58.6%</td><td><span class="tag pre">pre-registered</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="note">
+      <li>run1 and run2 used a confidence normalised over the candidate list. That cannot express "none of these", which explains run2's low precision on hard letters; run3 and run4 use the raw probability.</li>
+      <li>run3's test set is dominated by records the method cannot address: 289 of 536 have the title <code>[n/a]</code>, and 253 are Republican-era letters. Its threshold rule (lowest threshold reaching 90% training precision) also selected 0.010; run4 replaced it with a 97% rule before running.</li>
+      <li>On run4's training folds, letters scored 0.9–1.0 had a mean probability of 0.96 and were correct 96% of the time (n = 1,963).</li>
+      <li>Simple baseline on the run1 split (dictionary + era + surname, answer only when one candidate remains): answered 37.9% at 89.6% precision.</li>
+    </ul>
+  </section>
+
+  <section class="caveat">
+    <h3>Limits to weigh</h3>
+    <ul>
+      <li><strong>Selection.</strong> Every gold label is a letter that people managed to identify. Letters that resisted identification are under-represented, so the headline figures are an upper bound for any remaining backlog.</li>
+      <li><strong>Rule design.</strong> The four candidate rules were designed after reading about 45 training examples from the 2026 release, some of which belong to the run4 batch. The model and threshold never saw that batch.</li>
+      <li><strong>Alias provenance.</strong> An alias added to CBDB while identifying a letter would favour the dictionary. In run4, only 2 of the 8,757 test letters that matched a 2022-07 alias had that alias sourced from the same collection.</li>
+      <li><strong>No expert review.</strong> Correctness is measured only against CBDB's own identifications. Disagreements have not been examined by a specialist, and some may be errors in the gold labels.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Questions for the CBDB team</h2>
+    <ol>
+      <li>The CSA page lists 54,391 Ming letters with addressees for a minority. Would you be open to a pilot: we run the linker on a few hundred unidentified letters of your choosing, and a contributor reviews its high-confidence answers? That would show how much of the remaining set is tractable.</li>
+      <li>Are there collections still to be entered where a first-pass suggestion, with abstention, would save contributors time?</li>
+      <li>Does CSA hold reviewed identifications not yet merged into a CBDB release? They would make a clean, unseen test set.</li>
+      <li>If useful, what output format would fit your workflow (for example, the CSA task CSV with a suggested 通訊人 and a confidence column)?</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Sources</h2>
+    <dl>
+      <dt>CBDB</dt><dd>SQLite release 2026-10-03 (SHA-256 a2a87e08…e101) via <a href="https://github.com/cbdb-project/cbdb_sqlite">cbdb-project/cbdb_sqlite</a>; historical releases 2022-07-27, 2023-03-24 and 2025-05-20 from the project's Hugging Face history folder. Licence CC BY-NC-SA 4.0 as stated in the <a href="https://openhumanitiesdata.metajnl.com/articles/10.5334/johd.68">JOHD data paper</a>.</dd>
+      <dt>CSA tasks</dt><dd><code>newtask.csv</code> (10,597 rows, 6,914 without a recipient) in <a href="https://github.com/cbdb-project/crowdsource-webapp">cbdb-project/crowdsource-webapp</a>.</dd>
+      <dt>CSA page</dt><dd><a href="https://cbdb.hsites.harvard.edu/csa-ming-letters-project">CSA Ming Letters project</a>, read 2026-10-04: 54,391 letters listed; addressees identified for a minority.</dd>
+      <dt>Figures</dt><dd>All accuracy figures are our own measurements; scripts and pre-registration notes are available on request.</dd>
+    </dl>
+  </section>
+</main>

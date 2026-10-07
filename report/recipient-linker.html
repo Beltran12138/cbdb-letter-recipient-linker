@@ -71,7 +71,7 @@ dd { margin: 0; }
 
 <main>
   <header>
-    <div class="eyebrow">Methods note · draft for the CBDB team · 2026-10-04</div>
+    <div class="eyebrow">Methods note · draft for the CBDB team · 2026-10-04, revised 2026-10-07</div>
     <h1>Linking letter titles to recipients in CBDB</h1>
     <p>An automatic first pass for 致書 / 答書 records: given a letter's writer and title, propose the recipient's CBDB person ID with a calibrated confidence, and abstain when unsure.</p>
     <div class="meta"><span>Data: CBDB SQLite 2026-10-03 and three earlier releases</span><span>Code: <a href="https://github.com/Beltran12138/cbdb-letter-recipient-linker">cbdb-letter-recipient-linker</a> (MIT; <code>disamb/predict.py</code> links new letters)</span></div>
@@ -106,7 +106,7 @@ dd { margin: 0; }
     <ol>
       <li><strong>Candidates.</strong> Substrings of the title (2–4 characters) are looked up against every person's name and alternate names (<code>ALTNAME_DATA</code>), with common suffixes such as 山人 and 先生 stripped and a short table of variant characters (荅/答, 廵/巡, 菴/庵, 内/內 and others). Four rules add candidates the dictionary misses: surname followed within seven characters by a given name; surname plus an office term checked against <code>POSTED_TO_OFFICE_DATA</code>; the writer's kin named in the title; and the stripped-suffix aliases. Candidates more than 150 years from the writer are dropped.</li>
       <li><strong>Ranking.</strong> A gradient-boosted classifier scores each candidate on 27 features: match length, whether the preceding character is the candidate's surname, alias type (字, 號, 謚號…), how many people share the matched string, distance in index year, shared dynasty and address, non-letter associations and kinship with the writer, and offices whose names appear in the title.</li>
-      <li><strong>Confidence and abstention.</strong> Confidence is the model's probability for its top candidate. Below a threshold chosen on the training data, the linker returns no answer.</li>
+      <li><strong>Confidence and abstention.</strong> Confidence is the model's probability for its top candidate. Below a fixed threshold of 0.9, the linker returns no answer.</li>
       <li><strong>Leakage guard.</strong> No feature uses letter relations (codes 429–436), since these are the labels.</li>
     </ol>
   </section>
@@ -166,7 +166,7 @@ dd { margin: 0; }
       <dt>CBDB</dt><dd>SQLite release 2026-10-03 (SHA-256 a2a87e08…e101) via <a href="https://github.com/cbdb-project/cbdb_sqlite">cbdb-project/cbdb_sqlite</a>; historical releases 2022-07-27, 2023-03-24 and 2025-05-20 from the project's Hugging Face history folder. Licence CC BY-NC-SA 4.0 as stated in the <a href="https://openhumanitiesdata.metajnl.com/articles/10.5334/johd.68">JOHD data paper</a>.</dd>
       <dt>CSA tasks</dt><dd><code>newtask.csv</code> (10,597 rows, 6,914 without a recipient) in <a href="https://github.com/cbdb-project/crowdsource-webapp">cbdb-project/crowdsource-webapp</a>.</dd>
       <dt>CSA page</dt><dd><a href="https://cbdb.hsites.harvard.edu/csa-ming-letters-project">CSA Ming Letters project</a>, read 2026-10-04: 54,391 letters listed; addressees identified for a minority.</dd>
-      <dt>Figures</dt><dd>All accuracy figures are our own measurements; scripts and pre-registration notes are available on request.</dd>
+      <dt>Figures</dt><dd>All accuracy figures are our own measurements; scripts, logs and pre-registration notes are in the code repository.</dd>
     </dl>
   </section>
 </main>

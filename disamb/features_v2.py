@@ -103,7 +103,7 @@ def candidates(title, writer):
     for kw in OFFICE_ALIAS:                              # R2：姓 + 官称
         for m in re.finditer(kw, t):
             pre = t[max(0, m.start() - 3):m.start()]
-            for sur in {c for c in pre if c in SURNAMES}:
+            for sur in dict.fromkeys(c for c in pre if c in SURNAMES):   # 按出现顺序；set 的顺序随 PYTHONHASHSEED 变
                 for pid in office_holders.get((sur, kw), ()):
                     add(pid, 'R2姓官称', kw, 'office', m.start(), len(kw))
     for pid in kin.get(writer, ()):                      # R4：写信人亲属，名出现在标题

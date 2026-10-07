@@ -74,13 +74,13 @@ dd { margin: 0; }
     <div class="eyebrow">Methods note · draft for the CBDB team · 2026-10-04</div>
     <h1>Linking letter titles to recipients in CBDB</h1>
     <p>An automatic first pass for 致書 / 答書 records: given a letter's writer and title, propose the recipient's CBDB person ID with a calibrated confidence, and abstain when unsure.</p>
-    <div class="meta"><span>Data: CBDB SQLite 2026-10-03 and three earlier releases</span><span>Code: available on request</span></div>
+    <div class="meta"><span>Data: CBDB SQLite 2026-10-03 and three earlier releases</span><span>Code: <a href="https://github.com/Beltran12138/cbdb-letter-recipient-linker">cbdb-letter-recipient-linker</a> (MIT; <code>disamb/predict.py</code> links new letters)</span></div>
   </header>
 
   <section class="summary" aria-label="Summary">
     <h2>Summary</h2>
-    <p>Trained only on what CBDB contained on 2022-07-27, the linker was asked to identify the 9,738 titled letters that entered CBDB between 2022-07 and 2023-03 (the CSA Ming letters batch). It named the correct recipient first for <strong>87.1%</strong> of them. When it answered only above its pre-set confidence threshold, it covered <strong>51.1%</strong> of the batch at <strong>97.7%</strong> precision.</p>
-    <p>The gain is concentrated in letters that human contributors also found easy. On the 704 letters that were still unidentified in the public CSA task file and were identified later, top-1 accuracy falls to <strong>24.1%</strong>. The CSA page lists 54,391 Ming letters, of which only a minority have identified addressees. How many of the rest are easy cases is unknown, so a small reviewed pilot would be the next honest step.</p>
+    <p>Trained only on what CBDB contained on 2022-07-27, the linker was asked to identify the 9,738 titled letters that entered CBDB between 2022-07 and 2023-03 (the CSA Ming letters batch). It named the correct recipient first for <strong>87.1%</strong> of them. When it answered only at confidence ≥ 0.9, it covered <strong>62.2%</strong> of the batch at <strong>97.4%</strong> precision; across 10 repetitions with different candidate order, folds and model seed, that was 58–66% at 97.4–97.9%.</p>
+    <p>The gain is concentrated in letters that human contributors also found easy. On the 704 letters that were still unidentified in the public CSA task file and were identified later, top-1 accuracy falls to <strong>24.0%</strong>. The CSA page lists 54,391 Ming letters, of which only a minority have identified addressees. How many of the rest are easy cases is unknown, so a small reviewed pilot would be the next honest step.</p>
   </section>
 
   <section>
@@ -120,11 +120,11 @@ dd { margin: 0; }
           <tr><th>Run</th><th class="wrap">Test set</th><th class="num">Letters</th><th class="num">Candidate recall</th><th class="num">Top-1</th><th class="num">Answered</th><th class="num">Precision when answered</th><th>Status</th></tr>
         </thead>
         <tbody>
-          <tr class="primary"><td>run4</td><td class="wrap">Train on 2022-07-27 release; test on letters added 2022-07 → 2023-03</td><td class="num">9,738</td><td class="num">91.1%</td><td class="num">87.1%</td><td class="num">51.1%</td><td class="num">97.7%</td><td><span class="tag pre">pre-registered</span></td></tr>
-          <tr><td>run4</td><td class="wrap">Same, fixed threshold 0.9</td><td class="num">9,738</td><td class="num">—</td><td class="num">—</td><td class="num">62.8%</td><td class="num">97.6%</td><td><span class="tag pre">pre-registered</span></td></tr>
-          <tr><td>run4</td><td class="wrap">Subset already filled in CSA task file</td><td class="num">2,459</td><td class="num">—</td><td class="num">88.9%</td><td class="num">50.8%</td><td class="num">98.0%</td><td><span class="tag post">post hoc</span></td></tr>
-          <tr><td>run4</td><td class="wrap">Subset not in CSA task file</td><td class="num">6,616</td><td class="num">—</td><td class="num">92.6%</td><td class="num">55.6%</td><td class="num">97.9%</td><td><span class="tag post">post hoc</span></td></tr>
-          <tr><td>run4</td><td class="wrap">Subset still empty in CSA task file</td><td class="num">704</td><td class="num">—</td><td class="num">24.1%</td><td class="num">7.7%</td><td class="num">77.8%</td><td><span class="tag post">post hoc</span></td></tr>
+          <tr class="primary"><td>run4</td><td class="wrap">Train on 2022-07-27 release; test on letters added 2022-07 → 2023-03; answer at confidence ≥ 0.9</td><td class="num">9,738</td><td class="num">91.1%</td><td class="num">87.1%</td><td class="num">62.2%</td><td class="num">97.4%</td><td><span class="tag pre">pre-registered (secondary threshold)</span></td></tr>
+          <tr><td>run4</td><td class="wrap">Same, 10 repetitions (median [min, max])</td><td class="num">9,738</td><td class="num">91.1%</td><td class="num">87.1% [86.9, 87.4]</td><td class="num">62.1% [58.0, 65.9]</td><td class="num">97.6% [97.4, 97.9]</td><td><span class="tag post">post hoc</span></td></tr>
+          <tr><td>run4</td><td class="wrap">Subset already filled in CSA task file</td><td class="num">2,459</td><td class="num">—</td><td class="num">88.9%</td><td class="num">62.1%</td><td class="num">97.3%</td><td><span class="tag post">post hoc</span></td></tr>
+          <tr><td>run4</td><td class="wrap">Subset not in CSA task file</td><td class="num">6,616</td><td class="num">—</td><td class="num">92.7%</td><td class="num">67.3%</td><td class="num">97.7%</td><td><span class="tag post">post hoc</span></td></tr>
+          <tr><td>run4</td><td class="wrap">Subset still empty in CSA task file</td><td class="num">704</td><td class="num">—</td><td class="num">24.0%</td><td class="num">11.4%</td><td class="num">83.8%</td><td><span class="tag post">post hoc</span></td></tr>
           <tr><td>run2</td><td class="wrap">Writer-held-out split of the 2026 release</td><td class="num">2,651</td><td class="num">80.3%</td><td class="num">76.9%</td><td class="num">83.0%</td><td class="num">90.4%</td><td><span class="tag pre">pre-registered</span></td></tr>
           <tr><td>run2</td><td class="wrap">Letters empty in CSA task file, identified later</td><td class="num">721</td><td class="num">50.6%</td><td class="num">43.6%</td><td class="num">65.0%</td><td class="num">62.7%</td><td><span class="tag pre">pre-registered</span></td></tr>
           <tr><td>run3</td><td class="wrap">Train on 2023-03-24 release; test on letters added since</td><td class="num">536</td><td class="num">20.0%</td><td class="num">19.2%</td><td class="num">32.5%</td><td class="num">58.6%</td><td><span class="tag pre">pre-registered</span></td></tr>
@@ -134,7 +134,8 @@ dd { margin: 0; }
     <ul class="note">
       <li>run1 and run2 used a confidence normalised over the candidate list. That cannot express "none of these", which explains run2's low precision on hard letters; run3 and run4 use the raw probability.</li>
       <li>run3's test set is dominated by records the method cannot address: 289 of 536 have the title <code>[n/a]</code>, and 253 are Republican-era letters. Its threshold rule (lowest threshold reaching 90% training precision) also selected 0.010; run4 replaced it with a 97% rule before running.</li>
-      <li>On run4's training folds, letters scored 0.9–1.0 had a mean probability of 0.96 and were correct 96% of the time (n = 1,963).</li>
+      <li><strong>Correction, 2026-10-07.</strong> The first version of this note reported run4 at the 97% rule's threshold (0.945): 51.1% answered at 97.7%. A re-run from a clean copy showed that rule is unstable. Over 10 repetitions it chose thresholds from 0.94 to 1.0 and answered 0–54% of the batch, while precision when answering stayed at 97.8–98.2%. Results also depended on <code>PYTHONHASHSEED</code> through a set iteration in candidate generation, now fixed. Figures above use the fixed 0.9 threshold, which was pre-registered as secondary; run1–run3 rows are unchanged.</li>
+      <li>On run4's training folds, letters scored 0.9–1.0 had a mean probability of 0.96 and were correct 96% of the time (n = 1,951).</li>
       <li>Simple baseline on the run1 split (dictionary + era + surname, answer only when one candidate remains): answered 37.9% at 89.6% precision.</li>
     </ul>
   </section>
